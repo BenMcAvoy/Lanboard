@@ -31,5 +31,8 @@ Go to the `frontend` folder and simply run the same command.
 
 - [ ] Store data in database (backend)
 - [ ] Read data from database (backend)
-- [ ] Retrieve data from backend
+- [ ] Retrieve data from backend (frontend)
 - [ ] Display data to HTML (frontend)
+- [ ] Authenticated API (both)
+- [ ] Store more data about games in scores (backend)
+- [ ] Rust library (custom frontend)
