@@ -26,3 +26,10 @@ just <platform name>
 Where `<platform name>` is either `linux` or `windows`.
 
 Go to the `frontend` folder and simply run the same command.
+
+# Todo:
+
+- [ ] Store data in database (backend)
+- [ ] Read data from database (backend)
+- [ ] Retrieve data from backend
+- [ ] Display data to HTML (frontend)
