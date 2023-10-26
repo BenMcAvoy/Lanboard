@@ -29,6 +29,9 @@ Go to the `frontend` folder and simply run the same command.
 
 # Todo:
 
+- [x] Define basic protobuf structure (both)
+- [x] Compile protobufs and import (both)
+- [x] Setup a gRPC connectiok and send data (both)
 - [ ] Store data in database (backend)
 - [ ] Read data from database (backend)
 - [ ] Retrieve data from backend (frontend)
