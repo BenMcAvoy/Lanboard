@@ -1,21 +1,18 @@
 package main
 
 import (
-	// "google.golang.org/protobuf/proto"
-	"context"
-	"flag"
-	// "fmt"
-	"log"
-	"time"
+ 	"context"
+ 	"flag"
+ 	"log"
+  "time"
 
-	"google.golang.org/grpc"
-	// "google.golang.org/grpc/credentials/insecure"
+ 	"google.golang.org/grpc"
 
   api "lanboard/protobufs"
 )
 
 var (
-       addr = flag.String("addr", "localhost:50051", "the address to connect to")
+  addr = flag.String("addr", "localhost:50051", "the address to connect to")
 )
 
 func main() {
