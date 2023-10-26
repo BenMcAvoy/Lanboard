@@ -1,50 +1,72 @@
 package main
 
 import (
-  "context"
-  "flag"
-  "log"
-  "time"
+	"context"
+	"flag"
+	"log"
+	"time"
 
-  "google.golang.org/grpc"
+	"google.golang.org/grpc"
 
-  api "lanboard/protobufs"
+	api "lanboard/protobufs"
 )
 
 var (
-  addr = flag.String("addr", "localhost:50051", "the address to connect to")
+	addr = flag.String("addr", "localhost:50051", "the address to connect to")
 )
 
+type Leaderboard struct {
+	conn   *grpc.ClientConn
+	client api.LeaderboardClient
+}
+
+func NewLeaderboard() (*Leaderboard, error) {
+	conn, err := grpc.Dial(*addr, grpc.WithInsecure())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &Leaderboard{
+		conn:   conn,
+		client: api.NewLeaderboardClient(conn),
+	}, nil
+}
+
+func (c *Leaderboard) InsertScore(score *api.Score) (*api.InsertionResponse, error) {
+  return c.client.Insert(context.Background(), score)
+}
+
+func (c *Leaderboard) Close() error {
+  return c.conn.Close()
+}
+
 func main() {
-  // Parse the command line arguments. 
-  flag.Parse();
+	// Parse the command line arguments.
+	flag.Parse()
 
-  // Connect to the gRPC server.
-  conn, err := grpc.Dial(*addr, grpc.WithInsecure());
-
-  //  Check for connection failure. 
+  client, err := NewLeaderboard();
+  
   if err != nil {
-    log.Fatalf("Did not connect: %v", err);
+    log.Fatalf("Did not c onnect: %v", err)
   }
 
-  defer conn.Close();
-
-  // Create a new client to talk to the leadboard.
-  client := api.NewLeaderboardClient(conn);
+  defer client.Close()
 
   score := &api.Score {
     Name: "Me",
     Epoch: int32(time.Now().Unix()),
   }
 
-  // Call the insert function to add a score
-  resp, err := client.Insert(context.Background(), score);
+  resp, err := client.InsertScore(score)
 
-  // Check gor add score failure
   if err != nil {
-    log.Fatalf("Could not add score: %v", err);
+    log.Fatalf("Failed to send message: %v", err)
   }
 
-  // Print out whether it is okay or a fail. 
-  log.Printf("Response: %v", resp.Result);
+  if resp.Result != api.InsertionResult_OKAY {
+    log.Fatalf("Result not okay: %v", resp.Result)
+  }
+
+  log.Println("Sent request.")
 }
