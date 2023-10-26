@@ -22,7 +22,7 @@ impl Leaderboard for LeaderboardImpl {
         println!("Received request from: {:?}", request);
 
         let response = InsertionResponse {
-            result: InsertionResult::Okay.into(),
+            result: InsertionResult::Okay as i32,
         };
 
         Ok(Response::new(response))
