@@ -2,24 +2,42 @@ pub mod api {
     include!(concat!(env!("OUT_DIR"), "/api.v1.rs"));
 }
 
-#[inline]
-fn get_epoch() -> i32 {
-    match std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH) {
-        Ok(v) => v.as_secs_f32() as i32,
-        Err(e) => {
-            eprintln!("Failed to get unix epoch. Something is very wrong.\n    {e}");
-            std::process::exit(-1);
-        }
+use tonic::transport::Server;
+use tonic::{Request, Response, Status};
+
+use api::leaderboard_server::{Leaderboard, LeaderboardServer};
+use api::InsertionResponse;
+use api::InsertionResult;
+use api::Score;
+
+#[derive(Debug, Default)]
+pub struct LeaderboardImpl {}
+
+#[tonic::async_trait]
+impl Leaderboard for LeaderboardImpl {
+    async fn insert(
+        &self,
+        request: Request<Score>,
+    ) -> Result<Response<InsertionResponse>, Status> {
+        println!("Received request from: {:?}", request);
+
+        let response = InsertionResponse {
+            result: InsertionResult::Okay.into(),
+        };
+
+        Ok(Response::new(response))
     }
 }
 
-fn main() {
-    println!("Hello, backend.");
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let addr = "[::1]:50051".parse()?;
+    let leaderboard = LeaderboardImpl::default();
 
-    let mut time = api::Time::default();
+    Server::builder()
+        .add_service(LeaderboardServer::new(leaderboard))
+        .serve(addr)
+        .await?;
 
-    time.name = String::from("Me");
-    time.epoch = get_epoch();
-
-    dbg!(time);
+    Ok(())
 }
