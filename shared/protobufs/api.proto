@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package api.v1;
+
+service Leaderboard {
+  rpc Insert(Time) returns (InsertResponse) {}
+}
+
+message Time {
+  int32 name = 1;
+  int32 time = 2;
+}
+
+enum InsertionResult {
+  OKAY = 0;
+  FAIL = 1;
+}
+
+message InsertResponse {
+  InsertionResult result = 1;
+}
