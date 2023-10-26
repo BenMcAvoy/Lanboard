@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "./frontend";
+
 package api.v1;
 
 service Leaderboard {
