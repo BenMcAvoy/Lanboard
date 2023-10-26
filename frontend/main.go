@@ -14,6 +14,7 @@ import (
 
 var (
 	addr = flag.String("addr", "localhost:50051", "the address to connect to")
+	webaddr = flag.String("addr", "localhost:8000", "the address to host on")
 )
 
 type Leaderboard struct {
@@ -83,5 +84,5 @@ func main() {
 	http.HandleFunc("/add-score", scoreHandler(client))
   http.Handle("/static/", static)
 
-	log.Fatal(http.ListenAndServe(*addr, nil))
+	log.Fatal(http.ListenAndServe(*webaddr, nil))
 }
