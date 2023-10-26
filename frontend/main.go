@@ -19,13 +19,6 @@ var (
 )
 
 func main() {
-  score := &api.Score {
-    Name: "Me",
-    Epoch: int32(time.Now().Unix()),
-  }
-
-  flag.Parse();
-
   conn, err := grpc.Dial(*addr, grpc.WithInsecure());
 
   if err != nil {
@@ -36,11 +29,16 @@ func main() {
 
   client := api.NewLeaderboardClient(conn);
 
+  score := &api.Score {
+    Name: "Me",
+    Epoch: int32(time.Now().Unix()),
+  }
+
   resp, err := client.Insert(context.Background(), score);
 
   if err != nil {
     log.Fatalf("Could not add score: %v", err);
   }
 
-  log.Printf("Response: %v", resp);
+  log.Printf("Response: %v", resp.Result);
 }
