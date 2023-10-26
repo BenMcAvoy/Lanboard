@@ -5,10 +5,10 @@ option go_package = "./frontend";
 package api.v1;
 
 service Leaderboard {
-  rpc Insert(Time) returns (InsertResponse) {}
+  rpc Insert(Score) returns (InsertionResponse) {}
 }
 
-message Time {
+message Score {
   string name = 1;
   int32 epoch = 2;
 }
@@ -18,6 +18,6 @@ enum InsertionResult {
   FAIL = 1;
 }
 
-message InsertResponse {
+message InsertionResponse {
   InsertionResult result = 1;
 }
