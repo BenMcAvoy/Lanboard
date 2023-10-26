@@ -4,10 +4,6 @@ option go_package = "./apipb";
 
 package api.v1;
 
-service Leaderboard {
-  rpc Insert(Score) returns (InsertionResponse) {}
-}
-
 message Score {
   string name = 1;
   int32 epoch = 2;
@@ -20,4 +16,8 @@ enum InsertionResult {
 
 message InsertionResponse {
   InsertionResult result = 1;
+}
+
+service Leaderboard {
+  rpc Insert(Score) returns (InsertionResponse) {}
 }
