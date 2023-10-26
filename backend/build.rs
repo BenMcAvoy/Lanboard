@@ -1,5 +1,5 @@
-fn main() -> std::io::Result<()> {
-    prost_build::compile_protos(&["../shared/protobufs/api.proto"], &["../shared/protobufs/"])?;
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    tonic_build::compile_protos("../shared/protobufs/api.proto")?;
 
     Ok(())
 }
