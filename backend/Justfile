@@ -1,3 +1,5 @@
+default: linux windows
+
 watch:
   cargo watch -x run
 

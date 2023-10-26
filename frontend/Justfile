@@ -1,11 +1,19 @@
+default: linux windows
+
 watch:
   gow run .
 
+buf:
+  protoc ../shared/protobufs/*.proto --go_out=. --go_opt=paths=source_relative --proto_path=../shared
+
 run:
+  buf
   go run .
 
 linux:
+  just -f {{justfile()}} buf
   go build -o target/linux .
 
 windows:
+  just -f {{justfile()}} buf
   GOOS=windows GOARCH=amd64 go build -o target/windows.exe .
