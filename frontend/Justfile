@@ -7,7 +7,7 @@ buf:
   protoc ../shared/protobufs/*.proto --go_out=. --go_opt=paths=source_relative --proto_path=../shared
 
 run:
-  buf
+  just -f {{justfile()}} buf
   go run .
 
 linux:
