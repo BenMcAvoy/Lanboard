@@ -9,8 +9,8 @@ service Leaderboard {
 }
 
 message Time {
-  int32 name = 1;
-  int32 time = 2;
+  string name = 1;
+  int32 epoch = 2;
 }
 
 enum InsertionResult {
