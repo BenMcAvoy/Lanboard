@@ -1,0 +1,11 @@
+watch:
+  cargo watch -x run
+
+run:
+  cargo r
+
+linux:
+  cargo b --release
+
+windows:
+  cargo b --release --target=x86_64-pc-windows-gnu

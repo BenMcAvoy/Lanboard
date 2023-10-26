@@ -1,0 +1,11 @@
+watch:
+  gow run .
+
+run:
+  go run .
+
+linux:
+  go build -o target/linux .
+
+windows:
+  GOOS=windows GOARCH=amd64 go build -o target/windows.exe .
