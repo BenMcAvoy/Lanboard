@@ -9,6 +9,14 @@ message Score {
   int32 epoch = 2;
 }
 
+message ScoresRequest {
+  int32 amount = 1;
+}
+
+message ScoresResponse {
+  repeated Score scores = 1;
+}
+
 enum InsertionResult {
   OKAY = 0;
   FAIL = 1;
@@ -20,4 +28,5 @@ message InsertionResponse {
 
 service Leaderboard {
   rpc Insert(Score) returns (InsertionResponse) {}
+  rpc GetScores(ScoresRequest) returns (ScoresResponse) {}
 }
