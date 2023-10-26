@@ -77,7 +77,11 @@ func main() {
 
 	defer client.Close()
 
+  fs := http.FileServer(http.Dir("static"))
+  static := http.StripPrefix("/static/", fs)
+
 	http.HandleFunc("/add-score", scoreHandler(client))
+  http.Handle("/static/", static)
 
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
