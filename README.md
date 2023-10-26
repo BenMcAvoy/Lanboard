@@ -9,6 +9,7 @@ A leaderboard application that is wrote with Go and Rust.
 * [Just](https://github.com/casey/just) - For quick command running.
 * [Go](https://go.dev) - For compiling the frontend.
 * [Rust](https://www.rust-lang.org/) - For compiling the backend.
+* [Protobuf](https://protobuf.dev/) - For compiling `.proto` files.
 
 ### Optional:
 * [gow](https://github.com/mitranim/gow) - For watching the frontend code.
