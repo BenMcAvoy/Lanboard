@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "./frontend";
+option go_package = "./apipb";
 
 package api.v1;
 
