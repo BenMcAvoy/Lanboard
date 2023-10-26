@@ -1,12 +1,12 @@
 package main
 
 import (
- 	"context"
- 	"flag"
- 	"log"
+  "context"
+  "flag"
+  "log"
   "time"
 
- 	"google.golang.org/grpc"
+  "google.golang.org/grpc"
 
   api "lanboard/protobufs"
 )
