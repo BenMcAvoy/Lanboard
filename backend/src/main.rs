@@ -15,17 +15,12 @@ pub struct LeaderboardImpl {}
 
 #[tonic::async_trait]
 impl Leaderboard for LeaderboardImpl {
-    async fn insert(
-        &self,
-        request: Request<Score>,
-    ) -> Result<Response<InsertionResponse>, Status> {
+    async fn insert(&self, request: Request<Score>) -> Result<Response<InsertionResponse>, Status> {
         println!("Received request from: {:?}", request);
 
-        let response = InsertionResponse {
+        Ok(Response::new(InsertionResponse {
             result: InsertionResult::Okay as i32,
-        };
-
-        Ok(Response::new(response))
+        }))
     }
 }
 
