@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"log"
+	"net/http"
 	"time"
 
 	"google.golang.org/grpc"
@@ -34,39 +35,49 @@ func NewLeaderboard() (*Leaderboard, error) {
 }
 
 func (c *Leaderboard) InsertScore(score *api.Score) (*api.InsertionResponse, error) {
-  return c.client.Insert(context.Background(), score)
+	return c.client.Insert(context.Background(), score)
 }
 
 func (c *Leaderboard) Close() error {
-  return c.conn.Close()
+	return c.conn.Close()
+}
+
+func scoreHandler(client *Leaderboard) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+			return
+		}
+
+		name := r.FormValue("name")
+		epoch := int32(time.Now().Unix())
+
+		resp, err := client.InsertScore(&api.Score{Name: name, Epoch: epoch})
+
+		if err != nil {
+			http.Error(w, "Failed to add score", http.StatusInternalServerError)
+			return
+		}
+
+		if resp.Result != api.InsertionResult_OKAY {
+			http.Error(w, "Result not okay: %v", http.StatusInternalServerError)
+			return
+		}
+	}
 }
 
 func main() {
-	// Parse the command line arguments.
 	flag.Parse()
 
-  client, err := NewLeaderboard();
-  
-  if err != nil {
-    log.Fatalf("Did not c onnect: %v", err)
-  }
+	client, err := NewLeaderboard()
 
-  defer client.Close()
+	if err != nil {
+		log.Fatalf("Did not connect: %v", err)
+	}
 
-  score := &api.Score {
-    Name: "Me",
-    Epoch: int32(time.Now().Unix()),
-  }
+	defer client.Close()
 
-  resp, err := client.InsertScore(score)
+	http.HandleFunc("/add-score", scoreHandler(client))
 
-  if err != nil {
-    log.Fatalf("Failed to send message: %v", err)
-  }
-
-  if resp.Result != api.InsertionResult_OKAY {
-    log.Fatalf("Result not okay: %v", resp.Result)
-  }
-
-  log.Println("Sent request.")
+	log.Fatal(http.ListenAndServe(*addr, nil))
 }
