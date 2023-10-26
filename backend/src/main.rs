@@ -22,7 +22,7 @@ struct Config {
     host: String,
     
     /// The port to run on
-    #[structopt(short, long, default_value = 50051)]
+    #[structopt(short, long, default_value = "50051")]
     port: u32,
 }
 
