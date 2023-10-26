@@ -1,0 +1,7 @@
+.htmx-indicator {
+    display: none;
+}
+
+.htmx-request .spinner-indicator.spinner-border {
+    display: inline-block;
+}

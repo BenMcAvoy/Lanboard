@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 	"time"
@@ -14,7 +15,7 @@ import (
 
 var (
 	addr = flag.String("addr", "localhost:50051", "the address to connect to")
-	webaddr = flag.String("addr", "localhost:8000", "the address to host on")
+	webaddr = flag.String("webaddr", "localhost:8000", "the address to host on")
 )
 
 type Leaderboard struct {
@@ -45,6 +46,8 @@ func (c *Leaderboard) Close() error {
 
 func scoreHandler(client *Leaderboard) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+    log.Println("Adding score!")
+
 		if r.Method != http.MethodPost {
 			http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 			return
@@ -67,6 +70,12 @@ func scoreHandler(client *Leaderboard) http.HandlerFunc {
 	}
 }
 
+func index(w http.ResponseWriter, r *http.Request) {
+  template := template.Must(template.ParseFiles("static/index.html"));
+
+  template.Execute(w, nil);
+}
+
 func main() {
 	flag.Parse()
 
@@ -81,8 +90,9 @@ func main() {
   fs := http.FileServer(http.Dir("static"))
   static := http.StripPrefix("/static/", fs)
 
-	http.HandleFunc("/add-score", scoreHandler(client))
+	http.HandleFunc("/add-score/", scoreHandler(client))
   http.Handle("/static/", static)
+	http.HandleFunc("/", index)
 
 	log.Fatal(http.ListenAndServe(*webaddr, nil))
 }
